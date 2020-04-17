@@ -7,4 +7,6 @@
 *.userprefs
 *.lst
 *.lib
+*.a
+toml-test-library
 dub.selections.json

@@ -336,7 +336,7 @@ struct TOMLValue {
 		}
 	}
 
-	public inout void append(ref Appender!string appender) {
+	public const void append(ref Appender!string appender) {
 		final switch(this._type) with(TOML_TYPE) {
 			case STRING:
 				appender.put(formatString(this.store.str));
@@ -1485,8 +1485,8 @@ trimmed in raw strings.
 
 	// document
 
-	TOMLValue value = TOMLValue(["test": 44]);
-	doc = TOMLDocument(value);
+	TOMLValue value1 = TOMLValue(["test": 44]);
+	doc = TOMLDocument(value1);
 
 	// opEquals
 
@@ -1520,16 +1520,16 @@ trimmed in raw strings.
 	immutable table = TOMLValue(["a": 0, "b": 1]).toString();
 	assert(table == "{ a = 0, b = 1 }" || table == "{ b = 1, a = 0 }");
 
-	foreach(key, value; TOMLValue(["0": 0, "1": 1])) {
-		assert(value == key.to!int);
+	foreach(key, value2; TOMLValue(["0": 0, "1": 1])) {
+		assert(value2 == key.to!int);
 	}
 
-	value = 42;
-	assert(value.type == TOML_TYPE.INTEGER);
-	assert(value == 42);
-	value = TOMLValue("42");
-	assert(value.type == TOML_TYPE.STRING);
-	assert(value == "42");
+	value1 = 42;
+	assert(value1.type == TOML_TYPE.INTEGER);
+	assert(value1 == 42);
+	value1 = TOMLValue("42");
+	assert(value1.type == TOML_TYPE.STRING);
+	assert(value1 == "42");
 
 }
 
