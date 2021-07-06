@@ -1,14 +1,14 @@
 ﻿// Written in the D programming language.
 
 /**
- * 
+ *
  * Tom's Obvious, Minimal Language (v0.4.0).
  *
  * License: $(HTTP https://github.com/Kripth/toml/blob/master/LICENSE, MIT)
  * Authors: Kripth
  * References: $(LINK https://github.com/toml-lang/toml/blob/master/README.md)
  * Source: $(HTTP https://github.com/Kripth/toml/blob/master/src/toml/toml.d, toml/_toml.d)
- * 
+ *
  */
 module toml.toml;
 
@@ -112,11 +112,11 @@ struct TOMLValue {
 			this.assign(value);
 		}
 	}
-	
+
 	public inout pure nothrow @property @safe @nogc TOML_TYPE type() {
 		return this._type;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.STRING
 	 */
@@ -124,7 +124,7 @@ struct TOMLValue {
 		enforce!TOMLException(this._type == TOML_TYPE.STRING, "TOMLValue is not a string");
 		return this.store.str;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.INTEGER
 	 */
@@ -132,7 +132,7 @@ struct TOMLValue {
 		enforce!TOMLException(this._type == TOML_TYPE.INTEGER, "TOMLValue is not an integer");
 		return this.store.integer;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.FLOAT
 	 */
@@ -140,51 +140,51 @@ struct TOMLValue {
 		enforce!TOMLException(this._type == TOML_TYPE.FLOAT, "TOMLValue is not a float");
 		return this.store.floating;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.OFFSET_DATETIME
 	 */
-	public @property ref SysTime offsetDatetime() {
+	public @property ref SysTime offsetDatetime() return {
 		enforce!TOMLException(this.type == TOML_TYPE.OFFSET_DATETIME, "TOMLValue is not an offset datetime");
 		return this.store.offsetDatetime;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.LOCAL_DATETIME
 	 */
-	public @property @trusted ref DateTime localDatetime() {
+	public @property @trusted ref DateTime localDatetime() return {
 		enforce!TOMLException(this._type == TOML_TYPE.LOCAL_DATETIME, "TOMLValue is not a local datetime");
 		return this.store.localDatetime;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.LOCAL_DATE
 	 */
-	public @property @trusted ref Date localDate() {
+	public @property @trusted ref Date localDate() return {
 		enforce!TOMLException(this._type == TOML_TYPE.LOCAL_DATE, "TOMLValue is not a local date");
 		return this.store.localDate;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.LOCAL_TIME
 	 */
-	public @property @trusted ref TimeOfDay localTime() {
+	public @property @trusted ref TimeOfDay localTime() return {
 		enforce!TOMLException(this._type == TOML_TYPE.LOCAL_TIME, "TOMLValue is not a local time");
 		return this.store.localTime;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.ARRAY
 	 */
-	public @property @trusted ref TOMLValue[] array() {
+	public @property @trusted ref TOMLValue[] array() return {
 		enforce!TOMLException(this._type == TOML_TYPE.ARRAY, "TOMLValue is not an array");
 		return this.store.array;
 	}
-	
+
 	/**
 	 * Throws: TOMLException if type is not TOML_TYPE.TABLE
 	 */
-	public @property @trusted ref TOMLValue[string] table() {
+	public @property @trusted ref TOMLValue[string] table() return {
 		enforce!TOMLException(this._type == TOML_TYPE.TABLE, "TOMLValue is not a table");
 		return this.store.table;
 	}
@@ -429,7 +429,7 @@ private string formatString(string str) {
  * 		TOMLParserException when the document's syntax is incorrect
  */
 TOMLDocument parseTOML(string data, TOMLOptions options=TOMLOptions.none) {
-	
+
 	size_t index = 0;
 
 	/**
@@ -698,7 +698,7 @@ TOMLDocument parseTOML(string data, TOMLOptions options=TOMLOptions.none) {
 				else error("Invalid type: '" ~ original ~ "'"); assert(0);
 		}
 	}
-	
+
 	string readKey() {
 		enforceParser(index < data.length, "Key declaration expected but found EOF");
 		string ret;
@@ -718,7 +718,7 @@ TOMLDocument parseTOML(string data, TOMLOptions options=TOMLOptions.none) {
 		}
 		return ret;
 	}
-	
+
 	string[] readKeys() {
 		string[] keys;
 		index--;
@@ -809,7 +809,7 @@ TOMLDocument parseTOML(string data, TOMLOptions options=TOMLOptions.none) {
 			//TODO throw exception (missing value)
 		}
 	}
-	
+
 	void next() {
 
 		if(data[index] == '[') {
@@ -1028,14 +1028,14 @@ Violets are blue"""`);
 	doc = parseTOML(`
 		# The following strings are byte-for-byte equivalent:
 		str1 = "The quick brown fox jumps over the lazy dog."
-		
+
 		str2 = """
 The quick brown \
 
 
 		  fox jumps over \
 		    the lazy dog."""
-		
+
 		str3 = """\
 			The quick brown \
 			fox jumps over \
@@ -1282,7 +1282,7 @@ trimmed in raw strings.
 		[table-1]
 		key1 = "some string"
 		key2 = 123
-		
+
 		[table-2]
 		key1 = "another string"
 		key2 = 456
@@ -1319,7 +1319,7 @@ trimmed in raw strings.
 	doc = parseTOML(`
 		[a.b]
 		c = 1
-		
+
 		[a]
 		d = 2
 	`);
@@ -1329,10 +1329,10 @@ trimmed in raw strings.
 	assertThrown!TOMLException({
 		parseTOML(`
 			# DO NOT DO THIS
-				
+
 			[a]
 			b = 1
-			
+
 			[a]
 			c = 2
 		`);
@@ -1373,14 +1373,14 @@ trimmed in raw strings.
 	// ---------------
 	// Array of Tables
 	// ---------------
-	
+
 	doc = parseTOML(`
 		[[products]]
 		name = "Hammer"
 		sku = 738594937
-		
+
 		[[products]]
-		
+
 		[[products]]
 		name = "Nail"
 		sku = 284758393
@@ -1456,8 +1456,8 @@ trimmed in raw strings.
 
 	try {
 		parseTOML(`
-			
-			error = @		
+
+			error = @
 		`);
 	} catch(TOMLParserException e) {
 		assert(e.position.line == 3); // start from line 1
